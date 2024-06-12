@@ -1,37 +1,14 @@
 import numpy as np
 import cv2
 import pygame
-import smtplib
-from email.mime.text import MIMEText
-import os
 
 # Initialize pygame
 pygame.init()
 pygame.mixer.init()
 
 # Load siren sound
-sound_file = 'police-6007.mp3'
-if not os.path.exists(sound_file):
-    print(f"Sound file {sound_file} not found.")
-    exit(1)
-siren_sound = pygame.mixer.Sound(sound_file)
+siren_sound = pygame.mixer.Sound('police-6007.mp3')
 paused = False
-
-# Function to send email notification
-def send_email_alert():
-    msg = MIMEText("Tampering detected on your CCTV system.")
-    msg['Subject'] = 'CCTV Alert'
-    msg['From'] = 'your_email@example.com'
-    msg['To'] = 'recipient@example.com'
-
-    try:
-        with smtplib.SMTP('smtp.example.com', 587) as server:
-            server.starttls()
-            server.login('your_email@example.com', 'password')
-            server.send_message(msg)
-        print("Email sent successfully")
-    except Exception as e:
-        print(f"Failed to send email: {e}")
 
 # Video capturing starts
 cap = cv2.VideoCapture(0)
@@ -65,8 +42,6 @@ while True:
             # Play siren sound if not paused
             if not paused:
                 siren_sound.play()
-            # Send email notification
-            send_email_alert()
         
         cv2.imshow('frame', frame)
     
